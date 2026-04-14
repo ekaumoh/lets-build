@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ekaette Q. Umoh — Cloud Security Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:        #0a0c10;
+      --surface:   #111318;
+      --border:    #1e2229;
+      --accent:    #00e5a0;
+      --accent2:   #4f8cff;
+      --warn:      #ff6b6b;
+      --text:      #e8ecf0;
+      --muted:     #6b7280;
+      --tag-bg:    #161b24;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── GRID NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,229,160,0.025) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,229,160,0.025) 40px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── GLOW BLOBS ── */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(110px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.18;
+    }
+    .blob-1 { width: 500px; height: 500px; background: var(--accent); top: -120px; left: -80px; }
+    .blob-2 { width: 400px; height: 400px; background: var(--accent2); bottom: 0; right: -100px; }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10, 12, 16, 0.85);
+      backdrop-filter: blur(16px);
+    }
+    nav .inner {
+      max-width: 900px; margin: 0 auto; padding: 0 24px;
+      height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 140px 0 80px;
+      position: relative;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      background: rgba(0,229,160,0.08);
+      border: 1px solid rgba(0,229,160,0.2);
+      border-radius: 100px;
+      padding: 4px 12px;
+      margin-bottom: 28px;
+      letter-spacing: 0.06em;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+    h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.65;
+      margin-bottom: 36px;
+      font-weight: 400;
+    }
+    .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 22px;
+      border-radius: 8px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #050805;
+      border: 1px solid var(--accent);
+    }
+    .btn-primary:hover { background: #00ffb3; box-shadow: 0 0 24px rgba(0,229,160,0.4); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── STACK STRIP ── */
+    .stack-strip {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      overflow: hidden;
+      margin: 60px 0;
+    }
+    .stack-scroll {
+      display: flex; gap: 32px;
+      animation: marquee 22s linear infinite;
+      width: max-content;
+    }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .stack-item {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+    .stack-item span { color: var(--accent); }
+
+    /* ── SECTION HEADINGS ── */
+    section { padding: 64px 0; }
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    h2 {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+    .section-desc {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    /* ── PACKAGES ── */
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .pkg-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 24px;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .pkg-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(0,229,160,0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .pkg-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .pkg-card.featured { border-color: rgba(0,229,160,0.35); }
+    .pkg-badge {
+      display: inline-block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      padding: 3px 8px;
+      background: rgba(0,229,160,0.12);
+      color: var(--accent);
+      border-radius: 100px;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+    .pkg-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .pkg-subtitle {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .pkg-features {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 7px;
+    }
+    .pkg-features li {
+      font-size: 0.82rem;
+      color: #a0aab4;
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.4;
+    }
+    .pkg-features li::before {
+      content: '→';
+      position: absolute; left: 0;
+      color: var(--accent);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+    }
+    .pkg-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      margin-top: 20px;
+      letter-spacing: 0.04em;
+    }
+    .pkg-link:hover { text-decoration: underline; }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .proj-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: border-color 0.2s;
+    }
+    .proj-card:hover { border-color: var(--accent2); }
+    .proj-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+    .proj-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .proj-icon {
+      font-size: 1.1rem;
+      opacity: 0.7;
+    }
+    .proj-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-bottom: 14px;
+    }
+    .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--accent2);
+      background: rgba(79,140,255,0.1);
+      border: 1px solid rgba(79,140,255,0.18);
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+    }
+    .tag.green {
+      color: var(--accent);
+      background: rgba(0,229,160,0.08);
+      border-color: rgba(0,229,160,0.18);
+    }
+
+    /* ── SKILLS GRID ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .skill-group {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+    }
+    .skill-group-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .skill-list { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    /* ── CONTACT ── */
+    .contact-card {
+      background: var(--surface);
+      border: 1px solid rgba(0,229,160,0.25);
+      border-radius: 16px;
+      padding: 44px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% -20%, rgba(0,229,160,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .contact-card h2 { margin-bottom: 12px; }
+    .contact-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+    .contact-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+      margin-top: 40px;
+    }
+    footer .inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-note {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+    }
+    .footer-note a { color: var(--accent); text-decoration: none; }
+
+    /* ── ANIMATIONS ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 600px) {
+      nav .nav-links { display: none; }
+      .contact-card { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="inner">
+    <span class="nav-logo">~/ekaumoh</span>
+    <ul class="nav-links">
+      <li><a href="#packages">packages</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#skills">skills</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="container">
+  <section class="hero fade-in">
+    <div class="hero-badge">available for new engagements</div>
+    <h1>Cloud Security<br/>Engineer &<br/><em>Automation Specialist</em></h1>
+    <p class="hero-sub">
+      I help teams move from reactive firefighting to documented, automated, auditable infrastructure — across Azure, AWS, and GCP. Identity hardening, IaC pipelines, and M365 security that your org actually owns.
+    </p>
+    <div class="hero-cta">
+      <a href="https://ekaetteumoh.cloud/#packages" class="btn btn-primary" target="_blank">
+        ↗ View Packages & Pricing
+      </a>
+      <a href="https://github.com/ekaumoh/my_cloud_solutions" class="btn btn-ghost" target="_blank">
+        ⌥ Browse Repos
+      </a>
+    </div>
+  </section>
+</div>
+
+<!-- STACK MARQUEE -->
+<div class="stack-strip">
+  <div class="stack-scroll">
+    <span class="stack-item"><span>✦</span> Entra ID</span>
+    <span class="stack-item"><span>✦</span> Azure</span>
+    <span class="stack-item"><span>✦</span> Terraform</span>
+    <span class="stack-item"><span>✦</span> PowerShell</span>
+    <span class="stack-item"><span>✦</span> Graph API</span>
+    <span class="stack-item"><span>✦</span> Microsoft Sentinel</span>
+    <span class="stack-item"><span>✦</span> KQL</span>
+    <span class="stack-item"><span>✦</span> Zero Trust</span>
+    <span class="stack-item"><span>✦</span> M365 GCC High</span>
+    <span class="stack-item"><span>✦</span> NIST 800-171</span>
+    <span class="stack-item"><span>✦</span> Conditional Access</span>
+    <span class="stack-item"><span>✦</span> Azure Functions</span>
+    <span class="stack-item"><span>✦</span> Intune</span>
+    <!-- duplicate for seamless loop -->
+    <span class="stack-item"><span>✦</span> Entra ID</span>
+    <span class="stack-item"><span>✦</span> Azure</span>
+    <span class="stack-item"><span>✦</span> Terraform</span>
+    <span class="stack-item"><span>✦</span> PowerShell</span>
+    <span class="stack-item"><span>✦</span> Graph API</span>
+    <span class="stack-item"><span>✦</span> Microsoft Sentinel</span>
+    <span class="stack-item"><span>✦</span> KQL</span>
+    <span class="stack-item"><span>✦</span> Zero Trust</span>
+    <span class="stack-item"><span>✦</span> M365 GCC High</span>
+    <span class="stack-item"><span>✦</span> NIST 800-171</span>
+    <span class="stack-item"><span>✦</span> Conditional Access</span>
+    <span class="stack-item"><span>✦</span> Azure Functions</span>
+    <span class="stack-item"><span>✦</span> Intune</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- PACKAGES -->
+  <section id="packages" class="fade-in">
+    <p class="section-label">// services</p>
+    <h2>Fixed-Scope Packages</h2>
+    <p class="section-desc">Transparent deliverables, clear timelines. Full specs and quote form at <a href="https://ekaetteumoh.cloud/#packages" style="color:var(--accent)">ekaetteumoh.cloud</a>.</p>
+    <div class="packages-grid">
+
+      <div class="pkg-card featured">
+        <span class="pkg-badge">⭐ most popular</span>
+        <div class="pkg-title">Care Plan</div>
+        <div class="pkg-subtitle">ongoing · cancel anytime</div>
+        <ul class="pkg-features">
+          <li>User lifecycle management</li>
+          <li>M365 admin (Exchange, Teams, SharePoint)</li>
+          <li>Monthly security & compliance check-ins</li>
+          <li>Policy updates + light automation</li>
+          <li>Quarterly cost & roadmap review</li>
+        </ul>
+        <a href="https://ekaetteumoh.cloud/#packages" class="pkg-link" target="_blank">Get a quote →</a>
+      </div>
+
+      <div class="pkg-card">
+        <span class="pkg-badge">new tenants</span>
+        <div class="pkg-title">LaunchPad</div>
+        <div class="pkg-subtitle">1–15 users · 2–4 business days</div>
+        <ul class="pkg-features">
+          <li>M365 tenant setup (Exchange, Teams, SharePoint)</li>
+          <li>Domain + DNS + mail security (SPF/DKIM/DMARC)</li>
+          <li>MFA + baseline password policies</li>
+          <li>Architecture diagram + admin runbook</li>
+          <li>1 admin training session</li>
+        </ul>
+        <a href="https://ekaetteumoh.cloud/#packages" class="pkg-link" target="_blank">Get a quote →</a>
+      </div>
+
+      <div class="pkg-card">
+        <span class="pkg-badge">zero trust</span>
+        <div class="pkg-title">SecureFoundation</div>
+        <div class="pkg-subtitle">M365 Business Premium · 1–2 weeks</div>
+        <ul class="pkg-features">
+          <li>11 Conditional Access policies (IaC-deployed)</li>
+          <li>Intune compliance — Windows, macOS, iOS, Android</li>
+          <li>BYOD app protection policies</li>
+          <li>Audit log pipeline → Log Analytics</li>
+          <li>Break-glass + onboarding guide</li>
+        </ul>
+        <a href="https://ekaetteumoh.cloud/#packages" class="pkg-link" target="_blank">Get a quote →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="fade-in">
+    <p class="section-label">// portfolio</p>
+    <h2>Open Infrastructure</h2>
+    <p class="section-desc">Production-grade demos and real deployments. Source available on GitHub.</p>
+    <div class="projects-grid">
+
+      <div class="proj-card">
+        <div class="proj-header">
+          <div class="proj-name">Azure Cowrie SSH Honeypot</div>
+          <div class="proj-icon">🍯</div>
+        </div>
+        <p class="proj-desc">Terraform-deployed Cowrie honeypot on Azure with Microsoft Sentinel integration. Analytic rule for credential spray detection, Log Analytics workspace, and Azure Monitor Workbook for attack visualization.</p>
+        <div class="proj-tags">
+          <span class="tag">Terraform</span>
+          <span class="tag">Sentinel</span>
+          <span class="tag">KQL</span>
+          <span class="tag green">Security</span>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-header">
+          <div class="proj-name">SecureFoundation IaC Templates</div>
+          <div class="proj-icon">🔐</div>
+        </div>
+        <p class="proj-desc">Terraform modules for deploying the full 11-policy Conditional Access stack, Intune compliance baselines, and audit log pipelines. Plug-and-play for M365 Business Premium tenants.</p>
+        <div class="proj-tags">
+          <span class="tag">Terraform</span>
+          <span class="tag">Entra ID</span>
+          <span class="tag">Intune</span>
+          <span class="tag green">Zero Trust</span>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-header">
+          <div class="proj-name">M365 Automation Runbooks</div>
+          <div class="proj-icon">⚙️</div>
+        </div>
+        <p class="proj-desc">Azure Automation runbooks (PowerShell + managed identity) for user lifecycle, license assignment, group membership, and Graph API-driven reporting. Tested against GCC High.</p>
+        <div class="proj-tags">
+          <span class="tag">PowerShell</span>
+          <span class="tag">Graph API</span>
+          <span class="tag">Azure Automation</span>
+          <span class="tag green">GCC High</span>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-header">
+          <div class="proj-name">Producer Taste Mapper</div>
+          <div class="proj-icon">🎛️</div>
+        </div>
+        <p class="proj-desc">Serverless Azure Functions (Python) app with Cosmos DB, Key Vault, and Spotify API integration. Coral-orange / violet-purple aesthetic. Demonstrates full PaaS deployment and secret management patterns.</p>
+        <div class="proj-tags">
+          <span class="tag">Azure Functions</span>
+          <span class="tag">Python</span>
+          <span class="tag">Cosmos DB</span>
+          <span class="tag green">Key Vault</span>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-header">
+          <div class="proj-name">Family Wins Board</div>
+          <div class="proj-icon">🏆</div>
+        </div>
+        <p class="proj-desc">Custom domain app at umoh.family on Azure App Services. Azure DNS, Table/Blob Storage, Application Insights. Full Confluence documentation. Demonstrates real-world PaaS deployment with observability.</p>
+        <div class="proj-tags">
+          <span class="tag">App Services</span>
+          <span class="tag">Azure DNS</span>
+          <span class="tag">App Insights</span>
+          <span class="tag green">IaC</span>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-header">
+          <div class="proj-name">GCP Platform Engineering</div>
+          <div class="proj-icon">☁️</div>
+        </div>
+        <p class="proj-desc">Six-phase Terraform-provisioned networking foundation on GCP free tier. VPCs, firewall rules, IAM, and Cloud Storage — structured as a progressive portfolio lab series.</p>
+        <div class="proj-tags">
+          <span class="tag">GCP</span>
+          <span class="tag">Terraform</span>
+          <span class="tag">IAM</span>
+          <span class="tag green">Networking</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="fade-in">
+    <p class="section-label">// stack</p>
+    <h2>Technical Competencies</h2>
+    <p class="section-desc">Production experience in GovCloud and commercial environments.</p>
+    <div class="skills-grid">
+
+      <div class="skill-group">
+        <div class="skill-group-label">Identity & Access</div>
+        <div class="skill-list">
+          <span class="tag green">Entra ID</span>
+          <span class="tag green">PIM</span>
+          <span class="tag green">Conditional Access</span>
+          <span class="tag green">ABAC</span>
+          <span class="tag green">App Registrations</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-label">Cloud Platforms</div>
+        <div class="skill-list">
+          <span class="tag">Azure / GCC High</span>
+          <span class="tag">GCP</span>
+          <span class="tag">AWS (IAM)</span>
+          <span class="tag">M365 Multi-Tenant</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-label">Automation & IaC</div>
+        <div class="skill-list">
+          <span class="tag">Terraform</span>
+          <span class="tag">PowerShell</span>
+          <span class="tag">Graph API</span>
+          <span class="tag">Python</span>
+          <span class="tag">Azure Automation</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-label">Security & Compliance</div>
+        <div class="skill-list">
+          <span class="tag green">NIST 800-171</span>
+          <span class="tag green">CMMC</span>
+          <span class="tag green">STIG</span>
+          <span class="tag green">Intune</span>
+          <span class="tag green">Sentinel</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-label">Monitoring & Analytics</div>
+        <div class="skill-list">
+          <span class="tag">KQL</span>
+          <span class="tag">Log Analytics</span>
+          <span class="tag">Azure Monitor</span>
+          <span class="tag">App Insights</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-label">Collaboration & DevOps</div>
+        <div class="skill-list">
+          <span class="tag">SharePoint</span>
+          <span class="tag">Confluence</span>
+          <span class="tag">Jira</span>
+          <span class="tag">ServiceNow</span>
+          <span class="tag">Git</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="fade-in">
+    <div class="contact-card">
+      <p class="section-label">// let's work</p>
+      <h2>Ready to Harden Your Cloud?</h2>
+      <p>Full pricing, package details, and a direct quote form live at my site.<br/>I respond within one business day — no obligation, just a conversation.</p>
+      <div class="contact-links">
+        <a href="https://ekaetteumoh.cloud/#packages" class="btn btn-primary" target="_blank">↗ View Packages & Get a Quote</a>
+        <a href="mailto:ekaette@ekaetteumoh.cloud" class="btn btn-ghost">✉ Email Directly</a>
+        <a href="https://github.com/ekaumoh/my_cloud_solutions" class="btn btn-ghost" target="_blank">⌥ GitHub</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="inner">
+      <span class="footer-note">© 2025 Ekaette Q. Umoh · Baltimore, MD</span>
+      <span class="footer-note">
+        <a href="https://ekaetteumoh.cloud" target="_blank">ekaetteumoh.cloud</a>
+        &nbsp;·&nbsp;
+        <a href="https://github.com/ekaumoh/my_cloud_solutions" target="_blank">github.com/ekaumoh</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Fade-in on scroll
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.1 }
+  );
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

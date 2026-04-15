@@ -17,12 +17,8 @@ Infrastructure-as-code, automation runbooks, and security engineering artifacts 
 | Folder | What it covers | Relevant package |
 |---|---|---|
 | [`terraform/conditional-access`](./terraform/conditional-access/) | Zero Trust CA policy stack — 11 policies, IaC-deployed | SecureFoundation |
-| [`terraform/intune-compliance`](./terraform/intune-compliance/) | Device compliance baselines (Windows, macOS, iOS, Android) | SecureFoundation |
 | [`powershell/user-lifecycle`](./powershell/user-lifecycle/) | Automated onboarding & offboarding via Graph API | Care Plan |
-| [`powershell/license-management`](./powershell/license-management/) | License assignment, reporting, and reclamation | Care Plan |
 | [`kql/sentinel-analytics`](./kql/sentinel-analytics/) | Threat detection rules for Microsoft Sentinel | SecureFoundation |
-| [`kql/audit-log-queries`](./kql/audit-log-queries/) | M365 audit log KQL queries for compliance reporting | Care Plan |
-| [`honeypot`](./honeypot/) | Terraform-deployed Cowrie SSH honeypot on Azure | — |
 
 ---
 
@@ -60,4 +56,4 @@ Each subfolder has its own `README.md` with prerequisites, variable definitions,
 ## Contact
 
 **Ekaette Q. Umoh** — Cloud Security Engineer, Baltimore MD  
-[admin@ekaetteumoh.cloud](mailto:admin@ekaetteumoh.cloud)
+[ekaetteumoh.cloud](https://ekaetteumoh.cloud) · [ekaette@ekaetteumoh.cloud](mailto:ekaette@ekaetteumoh.cloud)

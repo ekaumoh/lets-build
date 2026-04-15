@@ -60,4 +60,4 @@ Each subfolder has its own `README.md` with prerequisites, variable definitions,
 ## Contact
 
 **Ekaette Q. Umoh** — Cloud Security Engineer, Baltimore MD  
-[ekaetteumoh.cloud](https://ekaetteumoh.cloud) · [ekaette@ekaetteumoh.cloud](mailto:ekaette@ekaetteumoh.cloud)
+[ekaetteumoh.cloud](https://ekaetteumoh.cloud) · [admin@ekaetteumoh.cloud](mailto:admin@ekaetteumoh.cloud)

@@ -25,17 +25,17 @@ Infrastructure-as-code, automation runbooks, and security engineering artifacts 
 ### 🔐 Zero Trust Conditional Access (Terraform)
 Full 11-policy CA stack deployed as code against an Entra ID tenant. Covers MFA enforcement, device compliance, named location controls, and break-glass exclusions. Designed for M365 Business Premium / GCC High.
 
-→ [`terraform/conditional-access/`](./terraform/conditional-access/)
+→ [`terraform/conditional_access`](./terraform/conditional_access/)
 
 ### ⚙️ User Lifecycle Automation (PowerShell + Graph API)
 Offboarding script that revokes sessions, removes licenses, converts to shared mailbox, blocks sign-in, and posts a summary to Teams — all via Microsoft Graph. No manual portal steps.
 
-→ [`powershell/user-lifecycle/`](./powershell/user-lifecycle/)
+→ [`powershell/user_lifecycle`](./powershell/user_lifecycle/)
 
 ### 📊 Sentinel Threat Detection (KQL)
 Production-tested KQL analytics rules for credential spray detection, MFA fatigue attack identification, and impossible travel alerting. Includes both the analytic rule query and a workbook visualization query.
 
-→ [`kql/sentinel-analytics/`](./kql/sentinel-analytics/)
+→ [`kql/sentinel_analytics`](./kql/sentinel_analytics/)
 
 ---
 

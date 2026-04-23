@@ -8,8 +8,6 @@
 
 Infrastructure-as-code, automation runbooks, and security engineering artifacts from production M365/Azure environments. Built to be reusable, documented, and auditable.
 
-> 💼 **Looking to engage?** Full service packages and pricing at [ekaetteumoh.cloud](https://ekaetteumoh.cloud/#packages)
-
 ---
 
 ## What's in this repo
@@ -55,5 +53,5 @@ Each subfolder has its own `README.md` with prerequisites, variable definitions,
 
 ## Contact
 
-**Ekaette Q. Umoh** — Cloud Security Engineer, Baltimore MD  
+**Ekaette Q. Umoh** — Cloud Security Engineer, DMV  
 [admin@ekaetteumoh.cloud](mailto:admin@ekaetteumoh.cloud)

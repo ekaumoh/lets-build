@@ -14,9 +14,9 @@ Infrastructure-as-code, automation runbooks, and security engineering artifacts 
 
 | Folder | What it covers | Relevant package |
 |---|---|---|
-| [`terraform/conditional-access`](./terraform/conditional-access/) | Zero Trust CA policy stack — 11 policies, IaC-deployed | SecureFoundation |
-| [`powershell/user-lifecycle`](./powershell/user-lifecycle/) | Automated onboarding & offboarding via Graph API | Care Plan |
-| [`kql/sentinel-analytics`](./kql/sentinel-analytics/) | Threat detection rules for Microsoft Sentinel | SecureFoundation |
+| [`terraform/conditional_access`](./terraform/conditional_access/) | Zero Trust CA policy stack — 11 policies, IaC-deployed | SecureFoundation |
+| [`powershell/user_lifecycle`](./powershell/user_lifecycle/) | Automated onboarding & offboarding via Graph API | Care Plan |
+| [`kql/sentinel_analytics`](./kql/sentinel_analytics/) | Threat detection rules for Microsoft Sentinel | SecureFoundation |
 
 ---
 

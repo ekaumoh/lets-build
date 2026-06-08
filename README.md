@@ -227,7 +227,7 @@ Runbooks for license assignment, reclamation, and reporting — unassigned licen
 | Cert | Status |
 |---|---|
 | AZ-900 · Microsoft Azure Fundamentals | ✅ Complete |
-| CompTIA Security+ (SY0-701) | 🔄 In progress — DoD 8570 IAT Level II |
+| CompTIA Security+ (SY0-701) | ✅ Complete |
 | AZ-500 · Microsoft Azure Security Engineer | 🔄 In progress |
 | AWS Solutions Architect Associate | 📋 Planned |
 | CKA · Certified Kubernetes Administrator | 📋 Planned |

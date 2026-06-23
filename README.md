@@ -55,7 +55,7 @@ Production-grade SSH honeypot deployed fully via Terraform — zero manual steps
 - End-to-end Terraform deployment: VM, NSG, VNet, Managed Identity, Log Analytics, DCR, AMA extension, Sentinel onboarding, and a scheduled analytic rule one `terraform apply`
 - Log pipeline: Cowrie → rsyslog `imfile` → AMA TCP collector (port 28330) → Log Analytics
 - KQL: credential spray detection, GeoIP attack map, top attacker IPs, top credentials attempted, attacker commands run
-- Managed Identity as the authentication mechanism for AMA — no stored credentials anywhere
+- Managed Identity as the authentication mechanism for AMA no stored credentials anywhere
 - Debugging through five real production bugs: missing pip entry point, wrong systemd path, virtualenv PATH, rsyslog permission errors, AMA identity failure all resolved and documented
 
 ---

@@ -1,4 +1,4 @@
-# Ekaette Q. Umoh — Cloud Security Portfolio
+# Ekaette Q. Umoh | Cloud Security Portfolio
 
 [![Azure](https://img.shields.io/badge/Azure-0078D4?style=flat&logo=microsoftazure&logoColor=white)](https://azure.microsoft.com)
 [![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat&logo=amazonaws&logoColor=white)](https://aws.amazon.com)
@@ -7,7 +7,7 @@
 [![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=flat&logo=kubernetes&logoColor=white)](https://kubernetes.io)
 [![Microsoft Sentinel](https://img.shields.io/badge/Microsoft_Sentinel-0078D4?style=flat&logo=microsoftazure&logoColor=white)](https://learn.microsoft.com/azure/sentinel)
 
-Cloud engineer with a security focus. I build infrastructure, automate the toil, then make sure it's hardened — across Azure GovCloud and AWS. This repo is a working record of that: real deployments, real debugging, and documented decisions.
+Cloud engineer with a security focus. I build infrastructure, automate the toil, then make sure it's hardened across Azure GovCloud and AWS. This repo is a working record of that: real deployments, real debugging, and documented decisions.
 
 ---
 
@@ -52,13 +52,11 @@ Cloud engineer with a security focus. I build infrastructure, automate the toil,
 Production-grade SSH honeypot deployed fully via Terraform — zero manual steps. Port 22 is open to the internet; real SSH admin access is on port 22222, key-only, restricted to a single `/32` source IP via NSG. Cowrie logs every credential attempt and attacker command, ships them to Log Analytics via rsyslog → AMA, and surfaces patterns through a Sentinel analytic rule and Azure Monitor Workbook with a live GeoIP attack map.
 
 **What it demonstrates:**
-- End-to-end Terraform deployment: VM, NSG, VNet, Managed Identity, Log Analytics, DCR, AMA extension, Sentinel onboarding, and a scheduled analytic rule — one `terraform apply`
+- End-to-end Terraform deployment: VM, NSG, VNet, Managed Identity, Log Analytics, DCR, AMA extension, Sentinel onboarding, and a scheduled analytic rule one `terraform apply`
 - Log pipeline: Cowrie → rsyslog `imfile` → AMA TCP collector (port 28330) → Log Analytics
 - KQL: credential spray detection, GeoIP attack map, top attacker IPs, top credentials attempted, attacker commands run
 - Managed Identity as the authentication mechanism for AMA — no stored credentials anywhere
-- Debugging through five real production bugs: missing pip entry point, wrong systemd path, virtualenv PATH, rsyslog permission errors, AMA identity failure — all resolved and documented
-
-→ [`honeypot/`](./honeypot/)
+- Debugging through five real production bugs: missing pip entry point, wrong systemd path, virtualenv PATH, rsyslog permission errors, AMA identity failure all resolved and documented
 
 ---
 
@@ -76,8 +74,6 @@ Shift-left DevSecOps pipeline that gates every Terraform deployment behind a Che
 - `storage_use_azuread = true` and `use_azuread_auth = true` on the backend block — required for key-free state auth; the provider env var alone doesn't propagate to backend init
 - Sentinel onboarded as Primary workspace to Defender XDR for unified incident queue
 
-→ [`terraform/devsecops_azure/`](./terraform/devsecops_azure/) *(coming soon)*
-
 ---
 
 ### ✅ AWS DevSecOps Pipeline
@@ -93,8 +89,6 @@ Full pass-fail-fix DevSecOps cycle captured in commit history. Pipeline gates ev
 - Checkov skip annotations require inline placement inside the resource block — file-level comments are not parsed by the action
 - AWS Config as the post-deploy layer: Checkov catches bad code; Config catches drift. Together they form defense in depth
 - CloudTrail + GuardDuty enabled for full audit coverage
-
-→ [`terraform/devsecops_aws/`](./terraform/devsecops_aws/) *(coming soon)*
 
 ---
 
@@ -112,8 +106,6 @@ Production-pattern containerized application platform on ECS Fargate — entirel
 - ARM64/AMD64 build mismatch: `docker buildx build --platform linux/amd64` required on Apple Silicon for ECS Fargate compatibility
 - Zero-downtime rolling deployment: 4 targets briefly (2 Healthy new + 2 Draining old), ALB routes only to healthy throughout
 
-→ [`terraform/ecs_fargate/`](./terraform/ecs_fargate/) *(coming soon)*
-
 ---
 
 ### ✅ Zero Trust Conditional Access Stack
@@ -127,8 +119,6 @@ Production-pattern containerized application platform on ECS Fargate — entirel
 - Promotion path: deploy in `enabledForReportingButNotEnforced`, review sign-in logs, then enforce
 - GCC High: `environment = "usgovernment"` on the provider block
 
-→ [`terraform/conditional_access/`](./terraform/conditional_access/)
-
 ---
 
 ### ✅ User Lifecycle Automation
@@ -141,8 +131,6 @@ Automated offboarding runbook — all steps via Microsoft Graph, no portal click
 - Graph API: `revokeSignInSessions`, `assignLicense`, `memberOf`, `managedDevices`, `mailboxSettings`
 - `-WhatIf` dry-run mode gates every destructive operation
 - GCC High: `graph.microsoft.us` endpoint callout in comments
-
-→ [`powershell/user_lifecycle/`](./powershell/user_lifecycle/)
 
 ---
 
@@ -158,8 +146,6 @@ Three detection rules targeting identity-based attacks:
 | Impossible Travel | T1078 | Same account → physically impossible distance between sign-ins |
 
 Each includes configurable thresholds, tuning notes, and RiskScore tiering logic.
-
-→ [`kql/sentinel_analytics/`](./kql/sentinel_analytics/)
 
 ---
 
@@ -209,16 +195,12 @@ Production-pattern EKS platform split across three repositories by concern: infr
 
 Terraform modules for device compliance policies across Windows, macOS, iOS, and Android — including BYOD app protection. Designed to close the loop with the Conditional Access stack: CA003 enforces device compliance; these policies define what compliant means.
 
-→ `terraform/intune_compliance/` *(in progress)*
-
 ---
 
 ### 🔄 M365 License Management Automation
 **Stack:** PowerShell · Microsoft Graph API · Azure Automation
 
 Runbooks for license assignment, reclamation, and reporting — unassigned license identification, bulk group-based assignment, and a Graph-driven utilization report.
-
-→ `powershell/license_management/` *(in progress)*
 
 ---
 
@@ -237,9 +219,9 @@ Runbooks for license assignment, reclamation, and reporting — unassigned licen
 
 ## Environment Context
 
-Most of this work was built in or adapted from a **GCC High / GovCloud** M365 multi-tenant environment. Where GCC High diverges from commercial endpoints (`graph.microsoft.us`, `login.microsoftonline.us`), it's noted inline in the code. Nothing here assumes commercial-only.
+Most of this work was built in or adapted from a **GCC High / GovCloud** M365 multi-tenant environment, AWS GovCloud & both cloud in commercial.
 
 ---
 
-**Ekaette Q. Umoh** · Baltimore, MD · TS/SCI Cleared  
-[ekaetteumoh.cloud](https://ekaetteumoh.cloud) · [ekaette@ekaetteumoh.cloud](mailto:ekaette@ekaetteumoh.cloud)
+**Ekaette Q. Umoh** · Baltimore, MD · Cleared  
+[ekaetteumoh.cloud](https://ekaetteumoh.cloud) · [admin@ekaetteumoh.cloud](mailto:admin@ekaetteumoh.cloud)

@@ -65,13 +65,13 @@ Production-grade SSH honeypot deployed fully via Terraform — zero manual steps
 
 **Repo:** [ekaumoh/devsecops-azure-pipeline](https://github.com/ekaumoh/devsecops-azure-pipeline)
 
-Shift-left DevSecOps pipeline that gates every Terraform deployment behind a Checkov security scan. Insecure code is blocked from merging via GitHub branch protection — hard enforcement, not advisory. Authentication uses OIDC federation between GitHub Actions and Entra ID: no stored secrets, no client credentials to rotate. Service principal is scoped to the deployment resource group only, not the subscription. Runtime coverage via Defender for Storage and Microsoft Sentinel unified with Defender XDR.
+Shift-left DevSecOps pipeline that gates every Terraform deployment behind a Checkov security scan. Insecure code is blocked from merging via GitHub branch protection hard enforcement, not advisory. Authentication uses OIDC federation between GitHub Actions and Entra ID: no stored secrets, no client credentials to rotate. Service principal is scoped to the deployment resource group only, not the subscription. Runtime coverage via Defender for Storage and Microsoft Sentinel unified with Defender XDR.
 
 **What it demonstrates:**
 - Checkov validates 11 controls per run; 8 enforced, 3 soft-failed with documented justification — a security engineering decision, not a bypass
 - OIDC federation: GitHub mints a short-lived token at runtime, Entra ID exchanges it for an Azure access token. Zero long-lived credentials
 - Least-privilege RBAC: Contributor scoped to resource group only; Storage Blob Data Contributor on state account only
-- `storage_use_azuread = true` and `use_azuread_auth = true` on the backend block — required for key-free state auth; the provider env var alone doesn't propagate to backend init
+- `storage_use_azuread = true` and `use_azuread_auth = true` on the backend block required for key-free state auth; the provider env var alone doesn't propagate to backend init
 - Sentinel onboarded as Primary workspace to Defender XDR for unified incident queue
 
 ---
@@ -81,12 +81,12 @@ Shift-left DevSecOps pipeline that gates every Terraform deployment behind a Che
 
 **Repo:** aws-devsecops-pipeline
 
-Full pass-fail-fix DevSecOps cycle captured in commit history. Pipeline gates every Terraform deployment behind Checkov — no AWS resource is created unless code passes compliance checks first. Authentication via OIDC with a trust policy scoped to a single repo. Post-deploy compliance monitoring via AWS Config with three managed rules watching for configuration drift — including manual console changes that bypass Terraform entirely.
+Full pass-fail-fix DevSecOps cycle captured in commit history. Pipeline gates every Terraform deployment behind Checkov no AWS resource is created unless code passes compliance checks first. Authentication via OIDC with a trust policy scoped to a single repo. Post-deploy compliance monitoring via AWS Config with three managed rules watching for configuration drift including manual console changes that bypass Terraform entirely.
 
 **What it demonstrates:**
 - Intentional misconfiguration → 7 Checkov findings → pipeline blocked → fix applied → green: the complete DevSecOps lifecycle visible in commit history
-- OIDC IAM role scoped to `repo:ekaumoh/aws-devsecops-pipeline:*` — not all of GitHub
-- Checkov skip annotations require inline placement inside the resource block — file-level comments are not parsed by the action
+- OIDC IAM role scoped to `repo:ekaumoh/aws-devsecops-pipeline:*` not all of GitHub
+- Checkov skip annotations require inline placement inside the resource block file-level comments are not parsed by the action
 - AWS Config as the post-deploy layer: Checkov catches bad code; Config catches drift. Together they form defense in depth
 - CloudTrail + GuardDuty enabled for full audit coverage
 
@@ -97,12 +97,12 @@ Full pass-fail-fix DevSecOps cycle captured in commit history. Pipeline gates ev
 
 **Repo:** aws-container-platform
 
-Production-pattern containerized application platform on ECS Fargate — entirely Terraform-provisioned, no manual console steps. Container tasks run exclusively in private subnets; the ALB is the only internet-reachable component. ECR has scan-on-push enabled and a lifecycle policy capping stored images. Two separate least-privilege IAM roles — task execution and task runtime — never combined.
+Production-pattern containerized application platform on ECS Fargate entirely Terraform-provisioned, no manual console steps. Container tasks run exclusively in private subnets; the ALB is the only internet-reachable component. ECR has scan-on-push enabled and a lifecycle policy capping stored images. Two separate least-privilege IAM roles — task execution and task runtime; never combined.
 
 **What it demonstrates:**
-- SG-to-SG referencing: ECS security group ingress references the ALB SG ID — not a CIDR. Only ALB-originated traffic reaches containers
-- IAM role separation: execution role has ECR pull + CloudWatch permissions; task role has zero AWS permissions — compromised container gains nothing
-- `assign_public_ip = false` on all ECS tasks — no direct internet path to the container layer
+- SG-to-SG referencing: ECS security group ingress references the ALB SG ID not a CIDR. Only ALB-originated traffic reaches containers
+- IAM role separation: execution role has ECR pull + CloudWatch permissions; task role has zero AWS permissions compromised container gains nothing
+- `assign_public_ip = false` on all ECS tasks no direct internet path to the container layer
 - ARM64/AMD64 build mismatch: `docker buildx build --platform linux/amd64` required on Apple Silicon for ECS Fargate compatibility
 - Zero-downtime rolling deployment: 4 targets briefly (2 Healthy new + 2 Draining old), ALB routes only to healthy throughout
 
@@ -115,7 +115,7 @@ Production-pattern containerized application platform on ECS Fargate — entirel
 
 **What it demonstrates:**
 - Policy-as-code: all 11 policies version-controlled and PR-reviewable before enforcement
-- Variables-driven: break-glass group, service account exclusions, privileged role IDs, and sensitive app IDs are all inputs — not hardcoded
+- Variables-driven: break-glass group, service account exclusions, privileged role IDs, and sensitive app IDs are all inputs; not hardcoded
 - Promotion path: deploy in `enabledForReportingButNotEnforced`, review sign-in logs, then enforce
 - GCC High: `environment = "usgovernment"` on the provider block
 
@@ -127,7 +127,7 @@ Production-pattern containerized application platform on ECS Fargate — entirel
 Automated offboarding runbook — all steps via Microsoft Graph, no portal clicks. Revokes sessions, blocks sign-in, removes licenses, removes from all groups, converts mailbox to shared, sets OOF, retires Intune devices, posts a completion Adaptive Card to Teams.
 
 **What it demonstrates:**
-- Managed identity token retrieval from IMDS at runtime — zero stored credentials
+- Managed identity token retrieval from IMDS at runtime zero stored credentials
 - Graph API: `revokeSignInSessions`, `assignLicense`, `memberOf`, `managedDevices`, `mailboxSettings`
 - `-WhatIf` dry-run mode gates every destructive operation
 - GCC High: `graph.microsoft.us` endpoint callout in comments
@@ -156,7 +156,7 @@ Backend for the personal portfolio site. Contact form submissions hit an Azure F
 
 **What it demonstrates:**
 - Azure Functions debugging: traced 401 → 500 → 200 through `authLevel` misconfiguration, wrong Mailgun key type (Key ID vs. secret), and CORS behavior
-- Azure DNS gotcha: entering full DKIM hostname in the Name field causes duplication — Azure appends the zone suffix automatically
+- Azure DNS gotcha: entering full DKIM hostname in the Name field causes duplication Azure appends the zone suffix automatically
 - SendGrid → Mailgun migration required no changes to `index.html`; all changes were backend-only
 
 → [ekaetteumoh.cloud](https://ekaetteumoh.cloud)
@@ -180,9 +180,9 @@ Production-pattern EKS platform split across three repositories by concern: infr
 | 6 | CloudWatch Container Insights, architecture diagram | 📋 Planned |
 
 **What it demonstrates so far:**
-- Worker nodes in private subnets; ALB in public subnets — only public-facing component routes inbound traffic to pods
+- Worker nodes in private subnets; ALB in public subnets only public-facing component routes inbound traffic to pods
 - GitHub OIDC → `sts:AssumeRoleWithWebIdentity`: pipeline role scoped to ECR push on `main` branch only, no long-lived keys
-- Trivy `exit-code: 1` hard-blocks on CRITICAL/HIGH CVEs — image never reaches ECR if vulnerable
+- Trivy `exit-code: 1` hard-blocks on CRITICAL/HIGH CVEs image never reaches ECR if vulnerable
 - Kustomize base has no `namespace:` field — overlay's namespace transformer injects it at render time, preventing env values from leaking into shared base
 - Monorepo → three-repo split is the production maturity move once the GitOps loop is verified end-to-end
 
@@ -193,14 +193,14 @@ Production-pattern EKS platform split across three repositories by concern: infr
 ### 🔄 Intune Device Compliance Baselines
 **Stack:** Terraform · `azurerm` provider · Intune · M365 Business Premium
 
-Terraform modules for device compliance policies across Windows, macOS, iOS, and Android — including BYOD app protection. Designed to close the loop with the Conditional Access stack: CA003 enforces device compliance; these policies define what compliant means.
+Terraform modules for device compliance policies across Windows, macOS, iOS, and Android including BYOD app protection. Designed to close the loop with the Conditional Access stack: CA003 enforces device compliance; these policies define what compliant means.
 
 ---
 
 ### 🔄 M365 License Management Automation
 **Stack:** PowerShell · Microsoft Graph API · Azure Automation
 
-Runbooks for license assignment, reclamation, and reporting — unassigned license identification, bulk group-based assignment, and a Graph-driven utilization report.
+Runbooks for license assignment, reclamation, and reporting unassigned license identification, bulk group-based assignment, and a Graph-driven utilization report.
 
 ---
 

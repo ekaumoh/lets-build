@@ -36,6 +36,7 @@ Cloud engineer with a security focus. I build infrastructure, automate the toil,
 | [Azure Cowrie SSH Honeypot](#-azure-cowrie-ssh-honeypot) | Built | Private | Terraform · Sentinel · KQL · AMA |
 | [AWS DevSecOps Pipeline](#-aws-devsecops-pipeline) | Built | Private | Terraform · Checkov · OIDC · AWS Config |
 | [AWS Container Platform — ECS Fargate](#-aws-container-platform--ecs-fargate) | Built | Private | Terraform · ECS · ECR · ALB · IAM |
+| [DoD Container Modernization Platform](#-dod-container-modernization-platform) | Built | Private | Azure AKS · Terraform · Azure Policy |
 | [Zero Trust Conditional Access Stack](#-zero-trust-conditional-access-stack) | Built | Private | Terraform · Entra ID · M365 |
 | [User Lifecycle Automation](#-user-lifecycle-automation) | Built | Private | PowerShell · Graph API |
 | [Sentinel Threat Detection Rules](#-sentinel-threat-detection-rules) | Built | Private | KQL · Microsoft Sentinel |
@@ -103,6 +104,20 @@ Production-pattern containerized application platform on ECS Fargate — entirel
 - `assign_public_ip = false` on all ECS tasks — no direct internet path to the container layer
 - ARM64/AMD64 build mismatch: `docker buildx build --platform linux/amd64` required on Apple Silicon for ECS Fargate compatibility
 - Zero-downtime rolling deployment: 4 targets briefly (2 Healthy new + 2 Draining old), ALB routes only to healthy throughout
+
+---
+
+### ✅ DoD Container Modernization Platform
+**Stack:** Azure · AKS · Terraform · Azure Policy · NIST SP 800-53 Rev 5 · GitHub Actions · OIDC
+
+Terraform platform targeting Azure AKS with IL2–IL4 compliance alignment and a defined GovCloud migration path. Built as a reusable module library rather than a single environment, so dev and prod differ by variable inputs instead of by forked code.
+
+**What it demonstrates:**
+- Six reusable modules — networking, AKS, ACR, Key Vault, monitoring, and Azure Policy — composed per environment
+- Hub-spoke VNet topology with Azure Firewall: Standard in dev, Premium with IDPS in prod
+- Private AKS cluster with Entra ID RBAC, Workload Identity, and Defender for Containers
+- HSM-backed customer-managed keys, ACR Premium with content trust, Log Analytics with KQL alert rules
+- Azure Policy enforces the built-in NIST SP 800-53 Rev 5 initiative across every environment — compliance as a deployed control, not a checklist
 
 ---
 

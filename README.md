@@ -221,4 +221,4 @@ Current production work is at **IL5 in Azure Government and AWS GovCloud**. Much
 
 ---
 
-**Ekaette Q. Umoh** · Silver Spring, MD · Cleared Professional
+**Ekaette Q. Umoh** · Baltimore, MD · Cleared Professional
